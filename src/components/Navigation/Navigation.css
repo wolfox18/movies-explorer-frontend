@@ -1,0 +1,94 @@
+.navigation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility .2s, opacity .2s linear;
+}
+.navigation_opened {
+  visibility: visible;
+  opacity: 1;
+}
+.navigation__container {
+  position: fixed;
+  right: 0;
+  background-color: #fff;
+  height: 100vh;
+  width: 66vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 159px 0 90px;
+  box-sizing: border-box;
+}
+.navigation__close {
+  position: absolute;
+  padding: 0;
+  right: 29px;
+  top: 29px;
+  background-image: url("../../images/cross.svg");
+  background-repeat: no-repeat;
+  border: none;
+  height: 18px;
+  width: 18px;
+  background-color: transparent;
+  cursor: pointer;
+}
+.navigation__links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.navigation__item {
+  width: 100%;
+  text-align: center;
+}
+.navigation__link {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #000000;
+  text-decoration: none;
+}
+.navigation__link_active {
+  text-decoration: underline 2px;
+  text-underline-offset: 8px;
+  cursor: default;
+}
+
+.navigation__bottom-link {
+  width: 100px;
+  height: 32px;
+  background: #f9f9f9;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  border: none;
+  text-align: center;
+  cursor: pointer;
+  color: #000000;
+}
+@media screen and (max-width: 450px) {
+  .navigation__container {
+    width: 100%;
+    padding: 144px 0 46px;
+  }
+  .navigation__close {
+    right: 18px;
+    top: 18px;
+  }
+  .navigation__links {
+    gap: 24px;
+  }
+
+}
