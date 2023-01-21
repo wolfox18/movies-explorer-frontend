@@ -49,19 +49,19 @@
   font-weight: 500;
 }
 .header__account {
-  padding: 0;
   width: 100px;
   height: 32px;
   border-radius: 20px;
   background-color: #f9f9f9;
-  text-align: center;
   font-weight: 500;
   font-size: 14px;
   line-height: 16px;
   color: #000000;
   text-align: center;
-  border: none;
-  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .header__burger {
   display: none;
@@ -80,25 +80,29 @@
   font-weight: 500;
   font-size: 12px;
   line-height: 16px;
+  display: flex;
+  align-items: center;
 }
 .header__signup {
   padding-right: 30px;
   color: #ffffff;
   background-color: transparent;
   text-align: center;
-  border: none;
-  cursor: pointer;
+  text-decoration: none;
 }
 .header__signin {
   background: #2be080;
   border-radius: 3px;
-  min-width: 76px;
-  min-height: 32px;
-  border: 0;
+  width: 76px;
+  height: 32px;
   padding: 0;
-  cursor: pointer;
+  text-decoration: none;
+  color: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-@media screen and (max-width: 1023px) {
+@media screen and (max-width: 768px) {
   .header {
     padding: 0 30px;
   }
@@ -112,7 +116,7 @@
     display: block;
   }
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 450px) {
   .header {
     padding: 0 14px;
   }

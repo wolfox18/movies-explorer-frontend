@@ -6,24 +6,21 @@ import Navigation from "../Navigation/Navigation";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
-function Movies({
-  isLoaded,
-  isNavTabOpened,
-  onCloseNavTab,
-  onBurgerClick,
-}) {
+function Movies({ isLoaded, isNavTabOpened, onCloseNavTab, onBurgerClick }) {
   return (
     <>
       <Header isLoggedIn={true} onBurgerClick={onBurgerClick} />
-      <SearchForm />
-      {isLoaded ? (
-        <>
-          <MoviesCardList />
-        </>
-      ) : (
-        <Preloader />
-      )}
-      <Navigation isOpened={isNavTabOpened} onCloseNavTab={onCloseNavTab} />
+      <main>
+        <SearchForm />
+        {isLoaded ? (
+          <>
+            <MoviesCardList isSaved={false} />
+          </>
+        ) : (
+          <Preloader />
+        )}
+        <Navigation isOpened={isNavTabOpened} onCloseNavTab={onCloseNavTab} />
+      </main>
       <Footer />
     </>
   );

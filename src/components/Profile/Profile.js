@@ -8,7 +8,7 @@ function Profile({onBurgerClick, isNavTabOpened, onCloseNavTab}) {
   return (
     <>
       <Header isLoggedIn={true} onBurgerClick={onBurgerClick}/>
-      <section className="profile">
+      <main className="profile">
         <div className="profile__container">
           <h1 className="profile__title">Привет, Username!</h1>
           <form className="profile__form">
@@ -45,8 +45,8 @@ function Profile({onBurgerClick, isNavTabOpened, onCloseNavTab}) {
             </button>
           </form>
         </div>
-      </section>
       <Navigation isOpened={isNavTabOpened} onCloseNavTab={onCloseNavTab}/>
+      </main>
     </>
   );
 }

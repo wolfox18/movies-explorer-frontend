@@ -3,7 +3,7 @@ import "../Register/Register.css";
 
 function Login() {
   return (
-    <section className="sign">
+    <main className="sign">
       <div className="sign__container">
         <a href="/" className="sign__logo transparent-link" />
         <h1 className="sign__title">Рады видеть!</h1>
@@ -40,7 +40,7 @@ function Login() {
           </p>
         </form>
       </div>
-    </section>
+    </main>
   );
 }
 

@@ -7,34 +7,46 @@ function Navigation({ isOpened, onCloseNavTab }) {
   return (
     <div className={`navigation ${isOpened ? "navigation_opened" : ""}`}>
       <div className="navigation__container">
-        <button onClick={onCloseNavTab} className="navigation__close transparent-link" />
+        <button
+          onClick={onCloseNavTab}
+          className="navigation__close transparent-link"
+        />
         <ul className="navigation__links">
           <li className="navigation__item">
-            <a href="/" className={`navigation__link transparent-link ${
+            <a
+              href="/"
+              className={`navigation__link transparent-link ${
                 location.pathname === "/" ? "navigation__link_active" : ""
-              }`}>
+              }`}
+            >
               Главная
             </a>
           </li>
           <li className="navigation__item">
-            <a href="/movies" className={`navigation__link transparent-link ${
+            <a
+              href="/movies"
+              className={`navigation__link transparent-link ${
                 location.pathname === "/movies" ? "navigation__link_active" : ""
-              }`}>
+              }`}
+            >
               Фильмы
             </a>
           </li>
           <li className="navigation__item">
-            <a href="/saved-movies" className={`navigation__link transparent-link ${
-                location.pathname === "/saved-movies" ? "navigation__link_active" : ""
-              }`}>
+            <a
+              href="/saved-movies"
+              className={`navigation__link transparent-link ${
+                location.pathname === "/saved-movies"
+                  ? "navigation__link_active"
+                  : ""
+              }`}
+            >
               Сохранённые фильмы
             </a>
           </li>
         </ul>
-        <a href="/profile">
-        <button className="navigation__bottom-link transparent-link">
+        <a href="/profile" className="navigation__bottom-link transparent-link">
           Аккаунт
-        </button>
         </a>
       </div>
     </div>

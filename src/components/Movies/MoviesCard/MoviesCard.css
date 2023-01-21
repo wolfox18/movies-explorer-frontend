@@ -37,6 +37,12 @@
 .card__like_liked {
   background-image: url("../../../images/heart-filled.svg");
 }
+.card__like_saved{
+  background-image: none;
+}
+.card__info:hover > .card__like_saved{
+  background-image: url("../../../images/delete.svg");
+}
 .card__duration {
   margin: 0;
   padding: 1px 16px 16px;

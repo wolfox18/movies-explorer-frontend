@@ -3,17 +3,17 @@ import MoviesCardList from "../Movies/MoviesCardList/MoviesCardList";
 import Navigation from "../Navigation/Navigation";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
+import SearchForm from "../Movies/SearchForm/SearchForm";
 
-function SavedMovies({
-  isNavTabOpened,
-  onCloseNavTab,
-  onBurgerClick,
-}) {
+function SavedMovies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
   return (
     <>
       <Header isLoggedIn={true} onBurgerClick={onBurgerClick} />
-      <MoviesCardList />
-      <Navigation isOpened={isNavTabOpened} onCloseNavTab={onCloseNavTab} />
+      <main>
+        <SearchForm />
+        <MoviesCardList isSaved={true} />
+        <Navigation isOpened={isNavTabOpened} onCloseNavTab={onCloseNavTab} />
+      </main>
       <Footer />
     </>
   );

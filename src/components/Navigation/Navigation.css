@@ -7,7 +7,7 @@
   height: 100%;
   visibility: hidden;
   opacity: 0;
-  transition: visibility .2s, opacity .2s linear;
+  transition: visibility 0.2s, opacity 0.2s linear;
 }
 .navigation_opened {
   visibility: visible;
@@ -64,7 +64,6 @@
   text-underline-offset: 8px;
   cursor: default;
 }
-
 .navigation__bottom-link {
   width: 100px;
   height: 32px;
@@ -73,10 +72,12 @@
   font-weight: 500;
   font-size: 14px;
   line-height: 16px;
-  border: none;
   text-align: center;
-  cursor: pointer;
   color: #000000;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 @media screen and (max-width: 450px) {
   .navigation__container {
@@ -90,5 +91,4 @@
   .navigation__links {
     gap: 24px;
   }
-
 }

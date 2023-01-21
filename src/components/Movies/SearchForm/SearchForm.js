@@ -7,12 +7,12 @@ function SearchForm() {
     setIsChecked(!isChecked);
   }
   return (
-    <section className="searchblock">
+    <section aria-label="Поиск" className="searchblock">
       <div className="searchblock__container">
         <form className="searchform">
           <div className="searchform__search">
             <div className="searchform__icon" />
-            <input className="searchform__input" placeholder="Фильм" />
+            <input className="searchform__input" placeholder="Фильм" required />
             <button className="searchform__submit transparent-link" />
           </div>
           <div className="searchform__filter" onClick={onCheckboxClick}>

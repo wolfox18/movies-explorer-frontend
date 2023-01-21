@@ -3,7 +3,7 @@ import "./NotFound.css";
 
 function NotFound() {
   return (
-    <section className="notfound">
+    <main className="notfound">
       <div className="notfound__contaner">
         <div className="notfound__info">
           <h1 className="notfound__title">404</h1>
@@ -13,7 +13,7 @@ function NotFound() {
           Назад
         </a>
       </div>
-    </section>
+    </main>
   );
 }
 

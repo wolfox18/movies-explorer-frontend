@@ -1,7 +1,18 @@
 import React from "react";
 import "./MoviesCard.css";
 
-function MoviesCard({ imagePath, name, isLiked, duration }) {
+function MoviesCard({ imagePath, name, isLiked, duration, isSaved }) {
+  let likeClass;
+
+  if (isLiked) {
+    likeClass = "card__like transparent-link card__like_liked";
+  } else {
+    likeClass = "card__like transparent-link";
+  }
+  if (isSaved) {
+    likeClass = "card__like transparent-link card__like_saved";
+  }
+
   return (
     <li className="card">
       <a
@@ -14,7 +25,7 @@ function MoviesCard({ imagePath, name, isLiked, duration }) {
       </a>{" "}
       <div className="card__info">
         <h3 className="card__name">{name}</h3>
-        <button className={`card__like transparent-link ${isLiked ? "card__like_liked" : ""}`} />
+        <button className={likeClass} />
       </div>
       <p className="card__duration">{duration}</p>
     </li>

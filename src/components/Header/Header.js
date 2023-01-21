@@ -50,10 +50,9 @@ function Header({ isLoggedIn, onBurgerClick }) {
         )}
         {isLoggedIn ? (
           <>
-            <a href="/profile">
-            <button className="header__account transparent-link">
+            <a className="header__account transparent-link" href="/profile">
               Аккаунт
-            </button></a>
+            </a>
             <button
               className={`header__burger transparent-link ${
                 location.pathname === "/" ? "header__burger_theme_dark" : ""
@@ -63,13 +62,11 @@ function Header({ isLoggedIn, onBurgerClick }) {
           </>
         ) : (
           <div className="header__sign">
-            <a href="/signup">
-              <button className="header__signup transparent-link">
-                Регистрация
-              </button>
+            <a href="/signup" className="header__signup transparent-link">
+              Регистрация
             </a>
-            <a href="/signin">
-              <button className="header__signin transparent-link">Войти</button>
+            <a href="/signin" className="header__signin transparent-link">
+              Войти
             </a>
           </div>
         )}
