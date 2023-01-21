@@ -1,0 +1,120 @@
+.sign {
+  padding: 70px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.sign__container {
+  max-width: 396px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.sign__logo {
+  background-image: url(../../images/logo.svg);
+  background-repeat: no-repeat;
+  height: 38px;
+  width: 38px;
+}
+.sign__title {
+  margin: 0;
+  padding: 40px 0 0;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+}
+.sign__form {
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+}
+.sing__label {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #a0a0a0;
+  padding: 20px 0 10px;
+}
+.sign__input {
+  height: 46px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: none;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  padding: 0 15px;
+  outline-style: none;
+}
+.sign__input_error {
+  color: #ff3055;
+}
+.sign__input:focus {
+  border-bottom: #a0a0a0 1px solid;
+}
+.sign__error {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  padding: 10px 0 69px;
+  color: #ff3055;
+}
+.sign__submit {
+  border: none;
+  background: #3456f3;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #ffffff;
+  height: 45px;
+  padding: 0;
+  cursor: pointer;
+}
+.sign__text {
+  align-self: center;
+  padding-top: 16px;
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #a0a0a0;
+}
+.sign__link {
+  color: #3456f3;
+  text-decoration: none;
+  padding-left: 6px;
+}
+@media screen and (max-width: 1023px) {
+  .sign{
+    padding: 232px 0;
+  }
+}
+@media screen and (max-width: 430px) {
+  .sign {
+    padding: 56px 30px 30px;
+  }
+  .sign__container {
+    max-width: none;
+  }
+  .sign__logo{
+    align-self: center;
+  }
+  .sign__title {
+    align-self: center;
+    padding: 50px 0 40px;;
+  }
+  .sign__error {
+    padding: 10px 0 157px;
+  }
+  .sign__submit {
+    font-size: 12px;
+    line-height: 15px;
+  }
+  .sign__text {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}

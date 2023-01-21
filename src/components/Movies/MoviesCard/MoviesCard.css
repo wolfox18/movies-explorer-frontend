@@ -1,0 +1,75 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background: #fdfdfd;
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+}
+.card__image {
+  width: 100%;
+  object-fit: cover;
+}
+.card__info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 16px;
+}
+.card__name {
+  padding: 0;
+  margin: 0;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+}
+.card__like {
+  height: 30px;
+  width: 30px;
+  border: none;
+  padding: 0;
+  background-image: url("../../../images/heart.svg");
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.card__like_liked {
+  background-image: url("../../../images/heart-filled.svg");
+}
+.card__like_saved{
+  background-image: none;
+}
+.card__info:hover > .card__like_saved{
+  background-image: url("../../../images/delete.svg");
+}
+.card__duration {
+  margin: 0;
+  padding: 1px 16px 16px;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 13px;
+  color: #a0a0a0;
+}
+@media screen and (max-width: 1023px) {
+
+  .card__info {
+    padding: 8px 14px;
+  }
+  .card__duration {
+    padding: 1px 14px 14px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .card__name {
+    font-size: 12px;
+    line-height: 15px;
+  }
+  .card__duration {
+    font-size: 10px;
+    line-height: 12px;
+  }
+  .card__info{
+    padding: 4px 14px;
+  }
+}
