@@ -1,25 +1,58 @@
 import React from "react";
 import "./MoviesCardList.css";
-import cardImagePath1 from "../../../images/movie-example-1.jpg";
-import cardImagePath2 from "../../../images/movie-example-2.jpg";
-import cardImagePath3 from "../../../images/movie-example-3.jpg";
-import cardImagePath4 from "../../../images/movie-example-4.jpg";
 import MoviesCard from "../MoviesCard/MoviesCard";
+import { durationToString } from "../../../utils/utils";
 
-function MoviesCardList ({isSaved}) {
-  return(
+function MoviesCardList({
+  isSaved,
+  onMoreClick,
+  isMoreVisible,
+  isNothingFound,
+  isError,
+  cards,
+}) {
+  // console.log(cards[0].image.url);
+  return (
     <section aria-label="Фильмы" className="cardlist">
       <ul className="cardlist__container">
-        <MoviesCard imagePath={cardImagePath1} name="33 слова о дизайне" isLiked={true} duration="1ч 47м" isSaved={isSaved}/>
-        <MoviesCard imagePath={cardImagePath2} name="Киноальманах «100 лет дизайна»" isLiked={false} duration="1ч 3м" isSaved={isSaved}/>
-        <MoviesCard imagePath={cardImagePath3} name="В погоне за Бенкси" isLiked={true} duration="1ч 21м" isSaved={isSaved}/>
-        <MoviesCard imagePath={cardImagePath4} name="Баския: Взрыв реальности" isLiked={true} duration="1ч 44м" isSaved={isSaved}/>
+        {cards.map((movie) => (
+          <MoviesCard
+            imagePath={"https://api.nomoreparties.co/" + movie.image.url}
+            name={movie.nameRU}
+            isLiked={false}
+            duration={durationToString(movie.duration)}
+            isSaved={isSaved}
+            url={movie.trailerLink}
+          />
+        ))}
+        {isNothingFound ? (
+          <li className="cardlist__alert">Ничего не найдено</li>
+        ) : (
+          <></>
+        )}
+        {isError ? (
+          <li className="cardlist__alert">
+            Во время запроса произошла ошибка. Возможно, проблема с соединением
+            или сервер недоступен. Подождите немного и попробуйте ещё раз
+          </li>
+        ) : (
+          <></>
+        )}
       </ul>
-      <div className="cardlist__more-container">
-        <button className="cardlist__more-button transparent-link">Ещё</button>
-      </div>
+      {isMoreVisible ? (
+        <div className="cardlist__more-container">
+          <button
+            onClick={onMoreClick}
+            className="cardlist__more-button transparent-link"
+          >
+            Ещё
+          </button>
+        </div>
+      ) : (
+        <></>
+      )}
     </section>
-  )
+  );
 }
 
 export default MoviesCardList;

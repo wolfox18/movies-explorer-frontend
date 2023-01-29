@@ -6,15 +6,44 @@ import Navigation from "../Navigation/Navigation";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
-function Movies({ isLoaded, isNavTabOpened, onCloseNavTab, onBurgerClick }) {
+function Movies(props) {
+  const {
+    isLoaded,
+    isNavTabOpened,
+    onCloseNavTab,
+    onBurgerClick,
+    onSearch,
+    searchKey,
+    isShortsChecked,
+    onShortsCheckboxClick,
+    onSearchInputChange,
+    onMoreClick,
+    isMoreVisible,
+    isNothingFound,
+    isError,
+    cards,
+  } = props;
   return (
     <>
       <Header isLoggedIn={true} onBurgerClick={onBurgerClick} />
       <main>
-        <SearchForm />
+        <SearchForm
+          onSearch={onSearch}
+          searchKey={searchKey}
+          isShortsChecked={isShortsChecked}
+          onShortsCheckboxClick={onShortsCheckboxClick}
+          onSearchInputChange={onSearchInputChange}
+        />
         {isLoaded ? (
           <>
-            <MoviesCardList isSaved={false} />
+            <MoviesCardList
+              isSaved={false}
+              onMoreClick={onMoreClick}
+              isMoreVisible={isMoreVisible}
+              isNothingFound={isNothingFound}
+              isError={isError}
+              cards={cards}
+            />
           </>
         ) : (
           <Preloader />

@@ -1,7 +1,7 @@
 import React from "react";
 import "./MoviesCard.css";
 
-function MoviesCard({ imagePath, name, isLiked, duration, isSaved }) {
+function MoviesCard({ imagePath, name, isLiked, duration, isSaved, url }) {
   let likeClass;
 
   if (isLiked) {
@@ -16,7 +16,7 @@ function MoviesCard({ imagePath, name, isLiked, duration, isSaved }) {
   return (
     <li className="card">
       <a
-        href="https://youtube.com"
+        href={url}
         className="card__link transparent-link"
         target="_blank"
         rel="noreferrer"

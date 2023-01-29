@@ -5,13 +5,27 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import SearchForm from "../Movies/SearchForm/SearchForm";
 
-function SavedMovies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
+function SavedMovies(props) {
+  const {
+    isLoaded,
+    isNavTabOpened,
+    onCloseNavTab,
+    onBurgerClick,
+    onSearch,
+    isShortsChecked,
+    onShortsCheckboxClick,
+    cards,
+  } = props;
   return (
     <>
       <Header isLoggedIn={true} onBurgerClick={onBurgerClick} />
       <main>
-        <SearchForm />
-        <MoviesCardList isSaved={true} />
+        <SearchForm
+          onSearch={onSearch}
+          isShortsChecked={isShortsChecked}
+          onShortsCheckboxClick={onShortsCheckboxClick}
+        />
+        <MoviesCardList isSaved={true} cards={cards} />
         <Navigation isOpened={isNavTabOpened} onCloseNavTab={onCloseNavTab} />
       </main>
       <Footer />
