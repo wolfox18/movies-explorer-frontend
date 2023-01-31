@@ -12,7 +12,7 @@ class MainApi {
     if (res.ok) {
       return res.json();
     }
-    throw new Error("Ошибка внутри API!" + res);
+    throw new Error(res.status);
   }
   authorise(email, password) {
     return fetch(`${this._url}/signin`, {
@@ -101,11 +101,9 @@ class MainApi {
   }
 }
 
-const mainApi = new MainApi({
+export const mainApi = new MainApi({
   baseUrl: API_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
-
-export default mainApi;

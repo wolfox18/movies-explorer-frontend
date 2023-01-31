@@ -1,7 +1,6 @@
 import React from "react";
 import "./MoviesCardList.css";
 import MoviesCard from "../MoviesCard/MoviesCard";
-import { durationToString } from "../../../utils/utils";
 
 function MoviesCardList({
   isSaved,
@@ -9,20 +8,19 @@ function MoviesCardList({
   isMoreVisible,
   isNothingFound,
   isError,
+  onLikeClick,
   cards,
 }) {
   // console.log(cards[0].image.url);
+
   return (
     <section aria-label="Фильмы" className="cardlist">
       <ul className="cardlist__container">
-        {cards.map((movie) => (
+        {cards.map((card) => (
           <MoviesCard
-            imagePath={"https://api.nomoreparties.co/" + movie.image.url}
-            name={movie.nameRU}
-            isLiked={false}
-            duration={durationToString(movie.duration)}
-            isSaved={isSaved}
-            url={movie.trailerLink}
+            key={card.id}
+            card={card}
+            onLikeClick={onLikeClick}
           />
         ))}
         {isNothingFound ? (

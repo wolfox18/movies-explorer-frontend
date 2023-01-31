@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
@@ -8,44 +8,17 @@ import Register from "../Register/Register";
 import Login from "../Login/Login";
 import Profile from "../Profile/Profile";
 import NotFound from "../NotFound/NotFound";
-import { movieApi } from "../../utils/MovieApi";
-import { filterMovies, howManyShow, howManyAdd } from "../../utils/utils.js";
+import { mainApi } from "../../utils/MainApi";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function App() {
+  const [currentUser, setCurrentUser] = React.useState({});
   const [isNavTabOpened, setIsNavTabOpened] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isBeatFilmsLoaded, setIsBeatFilmsLoaded] = React.useState(false);
-  const [filteredCards, setFilteredCards] = React.useState([]);
-  const [cardsToShowCounter, setCardsToShowCounter] = React.useState([]);
-  const [isShortsChecked, setIsShortsChecked] = React.useState(false);
-  const [searchKey, setSearchKey] = React.useState("");
-  const [isMoreVisible, setIsMoreVisible] = React.useState(false);
-  const [isNothingFound, setIsNothingFound] = React.useState(false);
-  const [isBeatFilmError, setIsBeatFilmError] = React.useState(false);
+  const [apiErrorText, setApiErrorText] = React.useState("");
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [succesMessage, setSuccesMessage] = React.useState("");
 
-  React.useEffect(() => {
-    if (filteredCards.length > cardsToShowCounter) {
-      setIsMoreVisible(true);
-    } else {
-      setIsMoreVisible(false);
-    }
-  }, [cardsToShowCounter, filteredCards]);
-
-  React.useEffect(() => {
-    if (isBeatFilmsLoaded && filteredCards.length === 0) {
-      setIsNothingFound(true);
-    } else {
-      setIsNothingFound(false);
-    }
-  }, [filteredCards, isBeatFilmsLoaded]);
-  React.useEffect(() => {
-    setSearchKey(JSON.parse(localStorage.getItem("searchParams")).key);
-    setIsShortsChecked(JSON.parse(localStorage.getItem("searchParams")).isShorts);
-  }, [])
-
-  const handleShortsCheckboxClick = () => {
-    setIsShortsChecked(!isShortsChecked);
-  };
+  const navigate = useNavigate();
 
   const handleNavTabOpen = () => {
     setIsNavTabOpened(true);
@@ -53,119 +26,140 @@ function App() {
   const handleCloseNavTab = () => {
     setIsNavTabOpened(false);
   };
-  const isLoggedIn = 1;
-
-  const showMovies = (key) => {
-    setCardsToShowCounter(howManyShow());
-    // console.log(cardsToShowCounter);
-    setFilteredCards(
-      filterMovies(
-        JSON.parse(localStorage.getItem("allMovies")),
-        key,
-        isShortsChecked
-      )
-    );
-  };
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    localStorage.setItem(
-      "searchParams",
-      JSON.stringify({
-        key: searchKey,
-        isShorts: isShortsChecked,
+  const login = (credentials) => {
+    mainApi
+      .authorise(credentials.email, credentials.password)
+      .then((res) => {
+        localStorage.setItem("jwt", res.token);
+        setIsLoggedIn(true);
+        mainApi
+          .getMe()
+          .then((res) => {
+            setCurrentUser({ name: res.name, email: res.email });
+            console.log(currentUser);
+            navigate("/movies");
+          })
+          .catch((err) => {
+            setApiErrorText(
+              "При получении данных пользователя произошла ошибка"
+            );
+          });
       })
-    );
-    if (!isBeatFilmsLoaded) {
-      movieApi
-        .getMovies()
-        .then((res) => {
-          setIsBeatFilmError(false);
-          localStorage.setItem("allMovies", JSON.stringify(res));
-          setIsBeatFilmsLoaded(true);
-          showMovies(searchKey);
-          setIsLoading(false);
-        })
-        .catch(() => {
-          setIsBeatFilmError(true);
-          setIsLoading(false);
-        });
-    } else {
-      showMovies(searchKey);
-      setIsLoading(false);
-    }
+      .catch((err) => {
+        setApiErrorText("При авторизации пользователя произошла ошибка");
+      });
   };
-  const handleMore = () => {
-    setCardsToShowCounter(cardsToShowCounter + howManyAdd());
+  const handleLogin = (inputs) => {
+    login(inputs);
   };
-  const handleSearchInputChange = (e) => {
-    setSearchKey(e.target.value);
+  const handleRegister = (inputs) => {
+    const { name, email, password } = inputs;
+    mainApi
+      .register(name, email, password)
+      .then((res) => {
+        login(inputs);
+      })
+      .catch((err) => {
+        if (err.message === 409) {
+          setApiErrorText("Пользователь с таким e-mail уже существует!");
+        } else {
+          setApiErrorText("При регистрации пользователя произошла ошибка");
+        }
+      });
   };
-  // console.log(cardsToShowCounter);
+  const clearResponceErrorText = () => {
+    setApiErrorText("");
+  };
+  const handleProfileChange = (data) => {
+    mainApi
+      .patchMe(data)
+      .then((res) => {
+        setCurrentUser(data);
+        clearResponceErrorText();
+        setSuccesMessage("Данные успешно изменены");
+      })
+      .catch((err) => {
+        setApiErrorText("При обновлении данных пользователя произошла ошибка");
+      });
+  };
+  const handleLogOut = () => {
+    localStorage.removeItem("jwt");
+    navigate("/");
+  };
   return (
-    <div className="page">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Main
-              isNavTabOpened={isNavTabOpened}
-              onCloseNavTab={handleCloseNavTab}
-              isLoggedIn={isLoggedIn}
-              onBurgerClick={handleNavTabOpen}
-            />
-          }
-        />
-        <Route
-          path="/movies"
-          element={
-            <Movies
-              isLoaded={!isLoading}
-              isNavTabOpened={isNavTabOpened}
-              onCloseNavTab={handleCloseNavTab}
-              onBurgerClick={handleNavTabOpen}
-              onSearch={handleSearch}
-              searchKey={searchKey}
-              isShortsChecked={isShortsChecked}
-              onShortsCheckboxClick={handleShortsCheckboxClick}
-              onSearchInputChange={handleSearchInputChange}
-              onMoreClick={handleMore}
-              isMoreVisible={isMoreVisible}
-              isNothingFound={isNothingFound}
-              isError={isBeatFilmError}
-              cards={filteredCards.slice(0, cardsToShowCounter)}
-            />
-          }
-        />
-        <Route
-          path="/saved-movies"
-          element={
-            <SavedMovies
-              isNavTabOpened={isNavTabOpened}
-              onCloseNavTab={handleCloseNavTab}
-              onBurgerClick={handleNavTabOpen}
-              onSearch={handleSearch}
-              isShortsChecked={isShortsChecked}
-              onShortsCheckboxClick={handleShortsCheckboxClick}
-              cards={[]}
-            />
-          }
-        />
-        <Route path="/signup" element={<Register />} />
-        <Route path="/signin" element={<Login />} />
-        <Route
-          path="/profile"
-          element={
-            <Profile
-              onBurgerClick={handleNavTabOpen}
-              isNavTabOpened={isNavTabOpened}
-              onCloseNavTab={handleCloseNavTab}
-            />
-          }
-        />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </div>
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="page">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Main
+                isNavTabOpened={isNavTabOpened}
+                onCloseNavTab={handleCloseNavTab}
+                isLoggedIn={isLoggedIn}
+                onBurgerClick={handleNavTabOpen}
+              />
+            }
+          />
+          <Route
+            path="/movies"
+            element={
+              <Movies
+                isNavTabOpened={isNavTabOpened}
+                onCloseNavTab={handleCloseNavTab}
+                onBurgerClick={handleNavTabOpen}
+              />
+            }
+          />
+          <Route
+            path="/saved-movies"
+            element={
+              <SavedMovies
+                isNavTabOpened={isNavTabOpened}
+                onCloseNavTab={handleCloseNavTab}
+                onBurgerClick={handleNavTabOpen}
+              />
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <Register
+                onSubmit={handleRegister}
+                responceErrorText={apiErrorText}
+                clearResponceErrorText={clearResponceErrorText}
+              />
+            }
+          />
+          <Route
+            path="/signin"
+            element={
+              <Login
+                onSubmit={handleLogin}
+                responceErrorText={apiErrorText}
+                clearResponceErrorText={clearResponceErrorText}
+              />
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <Profile
+                onBurgerClick={handleNavTabOpen}
+                isNavTabOpened={isNavTabOpened}
+                onCloseNavTab={handleCloseNavTab}
+                onSubmit={handleProfileChange}
+                clearResponceErrorText={clearResponceErrorText}
+                responceErrorText={apiErrorText}
+                onLogOut={handleLogOut}
+                succesMessage={succesMessage}
+              />
+            }
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 
