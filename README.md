@@ -15,3 +15,5 @@
 * Express для бэекнда
 
 Макет тут - [https://disk.yandex.ru/d/DQm9bWPqY-Mxxg](https://disk.yandex.ru/d/DQm9bWPqY-Mxxg)
+
+Ссылка на пулл реквест для ревью [https://github.com/wolfox18/movies-explorer-frontend/pull/4](https://github.com/wolfox18/movies-explorer-frontend/pull/4)
