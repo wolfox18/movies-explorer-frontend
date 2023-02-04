@@ -80,6 +80,10 @@
   font-weight: 500;
   color: #ff3055;
 }
+.profile__submit:disabled{
+  color: #999999;
+  cursor: default;
+}
 @media screen and (max-width: 1023px) {
   .profile {
     padding: 236px 0 269px;

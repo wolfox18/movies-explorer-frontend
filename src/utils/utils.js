@@ -1,4 +1,5 @@
 export const API_URL = "http://movi-api.nomoredomains.club";
+// export const API_URL = "http://localhost:3102";
 export const MOVIE_URL = "https://api.nomoreparties.co/beatfilm-movies";
 
 export const filterMovies = (movies, key, isShort) => {

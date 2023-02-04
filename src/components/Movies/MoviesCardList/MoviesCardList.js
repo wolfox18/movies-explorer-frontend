@@ -8,19 +8,19 @@ function MoviesCardList({
   isMoreVisible,
   isNothingFound,
   isError,
-  onLikeClick,
+  onCardButtonClick,
   cards,
 }) {
-  // console.log(cards[0].image.url);
 
   return (
     <section aria-label="Фильмы" className="cardlist">
       <ul className="cardlist__container">
         {cards.map((card) => (
           <MoviesCard
-            key={card.id}
+            key={card.movieId}
             card={card}
-            onLikeClick={onLikeClick}
+            onCardButtonClick={onCardButtonClick}
+            isSaved={isSaved}
           />
         ))}
         {isNothingFound ? (

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Register.css";
 
 function Register({ onSubmit, responceErrorText, clearResponceErrorText }) {
@@ -13,12 +14,14 @@ function Register({ onSubmit, responceErrorText, clearResponceErrorText }) {
     password: true,
   });
   const [errorMessage, setErrorMessage] = React.useState("");
-  const [isFormActive, setIsFormActive] = React.useState(true);
+  const [isInputsActive, setIsInputsActive] = React.useState(true);
+  const [isSubmitActive, setIsSubmitActive] = React.useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsFormActive(false);
+    setIsInputsActive(false);
     onSubmit(inputs);
+    setIsInputsActive(true);
   };
 
   const validateField = (field, value) => {
@@ -27,9 +30,11 @@ function Register({ onSubmit, responceErrorText, clearResponceErrorText }) {
         if (!value.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i)) {
           setIsInputsValid({ ...isInputsValid, email: false });
           setErrorMessage("Ошибка в почте");
+          setIsSubmitActive(false);
         } else {
           setIsInputsValid({ ...isInputsValid, email: true });
           setErrorMessage("");
+          setIsSubmitActive(true);
         }
         break;
       case "name":
@@ -38,14 +43,15 @@ function Register({ onSubmit, responceErrorText, clearResponceErrorText }) {
           setErrorMessage(
             "В имени можно использовать только латиницу, кириллицу, пробел или дефис"
           );
+          setIsSubmitActive(false);
         } else {
           setIsInputsValid({ ...isInputsValid, name: true });
           setErrorMessage("");
+          setIsSubmitActive(true);
         }
         break;
       case "password":
         if (value.length < 1) {
-          console.log(value.length);
           setIsInputsValid({ ...isInputsValid, password: false });
           setErrorMessage(
             "Пароль должен содержать, по крайней мере, 1 символ"
@@ -69,7 +75,7 @@ function Register({ onSubmit, responceErrorText, clearResponceErrorText }) {
   return (
     <main className="sign">
       <div className="sign__container">
-        <a href="/" className="sign__logo transparent-link" />
+        <Link to="/" className="sign__logo transparent-link" />
         <h1 className="sign__title">Добро пожаловать</h1>
         <form className="sign__form" onSubmit={handleSubmit}>
           <label className="sing__label" htmlFor="name">
@@ -80,11 +86,12 @@ function Register({ onSubmit, responceErrorText, clearResponceErrorText }) {
               isInputsValid.name ? "" : "sign__input_error"
             }`}
             name="name"
+            autoComplete="name"
             required
             placeholder="Ваше имя"
             value={inputs.name}
             onChange={handleInputChange}
-            disabled={isFormActive ? false : true}
+            disabled={isInputsActive ? false : true}
           />
 
           <label className="sing__label" htmlFor="email">
@@ -96,11 +103,12 @@ function Register({ onSubmit, responceErrorText, clearResponceErrorText }) {
             }`}
             name="email"
             type="email"
+            autoComplete="username"
             required
             placeholder="Ваша почта"
             value={inputs.email}
             onChange={handleInputChange}
-            disabled={isFormActive ? false : true}
+            disabled={isInputsActive ? false : true}
           />
 
           <label className="sing__label" htmlFor="password" type="password">
@@ -114,24 +122,25 @@ function Register({ onSubmit, responceErrorText, clearResponceErrorText }) {
             required
             placeholder=""
             type="password"
+            autoComplete="new-password"
             value={inputs.password}
             onChange={handleInputChange}
-            disabled={isFormActive ? false : true}
+            disabled={isInputsActive ? false : true}
           />
           <span className="sign__error">
             {errorMessage || responceErrorText}
           </span>
           <button
             className="sign__submit transparent-link"
-            disabled={(errorMessage || !isFormActive) ? true : false}
+            disabled={!isSubmitActive ? true : false}
           >
             Зарегистрироваться
           </button>
           <p className="sign__text">
             Уже зарегистрированы?
-            <a href="/signin" className="sign__link transparent-link">
+            <Link to="/signin" className="sign__link transparent-link">
               Войти
-            </a>
+            </Link>
           </p>
         </form>
       </div>

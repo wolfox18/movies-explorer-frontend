@@ -10,6 +10,7 @@ import Profile from "../Profile/Profile";
 import NotFound from "../NotFound/NotFound";
 import { mainApi } from "../../utils/MainApi";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import { ProtectedRoute, OnlyForUnregistredUsersRoute } from "./ProtectedRoute";
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
@@ -18,6 +19,10 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [succesMessage, setSuccesMessage] = React.useState("");
 
+  React.useEffect(() => {
+    checkToken();
+  }, []);
+
   const navigate = useNavigate();
 
   const handleNavTabOpen = () => {
@@ -25,6 +30,15 @@ function App() {
   };
   const handleCloseNavTab = () => {
     setIsNavTabOpened(false);
+  };
+
+  const checkToken = () => {
+    const jwt = localStorage.getItem("jwt");
+    if (!jwt) return;
+    mainApi.getMe().then((user) => {
+      setIsLoggedIn(true);
+      setCurrentUser(user);
+    }).catch((err)=>{console.log("Ошибка при проверке токена: ", err);});
   };
   const login = (credentials) => {
     mainApi
@@ -36,7 +50,6 @@ function App() {
           .getMe()
           .then((res) => {
             setCurrentUser({ name: res.name, email: res.email });
-            console.log(currentUser);
             navigate("/movies");
           })
           .catch((err) => {
@@ -60,7 +73,7 @@ function App() {
         login(inputs);
       })
       .catch((err) => {
-        if (err.message === 409) {
+        if (err.message === "409") {
           setApiErrorText("Пользователь с таким e-mail уже существует!");
         } else {
           setApiErrorText("При регистрации пользователя произошла ошибка");
@@ -84,6 +97,7 @@ function App() {
   };
   const handleLogOut = () => {
     localStorage.removeItem("jwt");
+    setIsLoggedIn(false);
     navigate("/");
   };
   return (
@@ -104,56 +118,66 @@ function App() {
           <Route
             path="/movies"
             element={
-              <Movies
-                isNavTabOpened={isNavTabOpened}
-                onCloseNavTab={handleCloseNavTab}
-                onBurgerClick={handleNavTabOpen}
-              />
+              <ProtectedRoute loggedIn={isLoggedIn}>
+                <Movies
+                  isNavTabOpened={isNavTabOpened}
+                  onCloseNavTab={handleCloseNavTab}
+                  onBurgerClick={handleNavTabOpen}
+                />
+              </ProtectedRoute>
             }
           />
           <Route
             path="/saved-movies"
             element={
-              <SavedMovies
-                isNavTabOpened={isNavTabOpened}
-                onCloseNavTab={handleCloseNavTab}
-                onBurgerClick={handleNavTabOpen}
-              />
+              <ProtectedRoute loggedIn={isLoggedIn}>
+                <SavedMovies
+                  isNavTabOpened={isNavTabOpened}
+                  onCloseNavTab={handleCloseNavTab}
+                  onBurgerClick={handleNavTabOpen}
+                />
+              </ProtectedRoute>
             }
           />
           <Route
             path="/signup"
             element={
-              <Register
-                onSubmit={handleRegister}
-                responceErrorText={apiErrorText}
-                clearResponceErrorText={clearResponceErrorText}
-              />
+              <OnlyForUnregistredUsersRoute loggedIn={isLoggedIn}>
+                <Register
+                  onSubmit={handleRegister}
+                  responceErrorText={apiErrorText}
+                  clearResponceErrorText={clearResponceErrorText}
+                />
+              </OnlyForUnregistredUsersRoute>
             }
           />
           <Route
             path="/signin"
             element={
-              <Login
-                onSubmit={handleLogin}
-                responceErrorText={apiErrorText}
-                clearResponceErrorText={clearResponceErrorText}
-              />
+              <OnlyForUnregistredUsersRoute loggedIn={isLoggedIn}>
+                <Login
+                  onSubmit={handleLogin}
+                  responceErrorText={apiErrorText}
+                  clearResponceErrorText={clearResponceErrorText}
+                />
+              </OnlyForUnregistredUsersRoute>
             }
           />
           <Route
             path="/profile"
             element={
-              <Profile
-                onBurgerClick={handleNavTabOpen}
-                isNavTabOpened={isNavTabOpened}
-                onCloseNavTab={handleCloseNavTab}
-                onSubmit={handleProfileChange}
-                clearResponceErrorText={clearResponceErrorText}
-                responceErrorText={apiErrorText}
-                onLogOut={handleLogOut}
-                succesMessage={succesMessage}
-              />
+              <ProtectedRoute loggedIn={isLoggedIn}>
+                <Profile
+                  onBurgerClick={handleNavTabOpen}
+                  isNavTabOpened={isNavTabOpened}
+                  onCloseNavTab={handleCloseNavTab}
+                  onSubmit={handleProfileChange}
+                  clearResponceErrorText={clearResponceErrorText}
+                  responceErrorText={apiErrorText}
+                  onLogOut={handleLogOut}
+                  succesMessage={succesMessage}
+                />
+              </ProtectedRoute>
             }
           />
           <Route path="*" element={<NotFound />} />

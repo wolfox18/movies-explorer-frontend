@@ -4,10 +4,13 @@
   background: #fdfdfd;
   box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
   border-radius: 6px;
+  max-width: 540px;
+  height: 281px;
 }
 .card__image {
   width: 100%;
   object-fit: cover;
+  height: 203px;
 }
 .card__info {
   display: flex;
@@ -53,6 +56,12 @@
 }
 @media screen and (max-width: 1023px) {
 
+  .card{
+    height: 262px;
+  }
+  .card__image{
+    height: 190px;
+  }
   .card__info {
     padding: 8px 14px;
   }

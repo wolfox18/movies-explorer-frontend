@@ -7,6 +7,8 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { movieApi } from "../../utils/MovieApi";
 import { filterMovies, howManyShow, howManyAdd } from "../../utils/utils.js";
+import { mainApi } from "../../utils/MainApi";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function Movies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -18,6 +20,8 @@ function Movies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
   const [isMoreVisible, setIsMoreVisible] = React.useState(false);
   const [isNothingFound, setIsNothingFound] = React.useState(false);
   const [isBeatFilmError, setIsBeatFilmError] = React.useState(false);
+
+  const currentUser = React.useContext(CurrentUserContext);
 
   React.useEffect(() => {
     if (filteredCards.length > cardsToShowCounter) {
@@ -40,6 +44,7 @@ function Movies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
       setIsShortsChecked(
         JSON.parse(localStorage.getItem("searchParams")).isShorts
       );
+      showMovies();
     }
   }, []);
 
@@ -47,7 +52,7 @@ function Movies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
     if (isBeatFilmsLoaded) {
       showMovies();
     }
-  }, [isShortsChecked])
+  }, [isShortsChecked]);
 
   const handleShortsCheckboxClick = () => {
     setIsShortsChecked(!isShortsChecked);
@@ -55,7 +60,6 @@ function Movies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
 
   const showMovies = () => {
     setCardsToShowCounter(howManyShow());
-    // console.log(cardsToShowCounter);
     setFilteredCards(
       filterMovies(
         JSON.parse(localStorage.getItem("allMovies")),
@@ -79,14 +83,53 @@ function Movies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
         .getMovies()
         .then((res) => {
           setIsBeatFilmError(false);
-          localStorage.setItem("allMovies", JSON.stringify(res));
-          setIsBeatFilmsLoaded(true);
-          showMovies();
-          setIsLoading(false);
+          mainApi
+            .getMovies()
+            .then((savedMovies) => {
+              const allMovies = res.map((movie) => {
+                const usersLikedMovies = savedMovies.filter(
+                  (someMovie) => someMovie.owner.email === currentUser.email
+                );
+                let isLiked = false;
+                let hexId = "";
+                usersLikedMovies.forEach((likedMovie) => {
+                  if (likedMovie.movieId === movie.id) {
+                    isLiked = true;
+                    hexId = likedMovie._id;
+                  }
+                });
+
+                return {
+                  country: movie.country,
+                  director: movie.director,
+                  duration: movie.duration,
+                  year: movie.year,
+                  description: movie.description,
+                  image: "https://api.nomoreparties.co/" + movie.image.url,
+                  trailerLink: movie.trailerLink,
+                  thumbnail:
+                    "https://api.nomoreparties.co/" +
+                    movie.image.formats.thumbnail.url,
+                  movieId: movie.id,
+                  nameRU: movie.nameRU,
+                  nameEN: movie.nameEN,
+                  isLiked: isLiked,
+                  hexId: hexId,
+                };
+              });
+              localStorage.setItem("allMovies", JSON.stringify(allMovies));
+              setIsBeatFilmsLoaded(true);
+              showMovies();
+            })
+            .catch((err) => {
+              console.log("Ошибка при загрузке сохраненных фильмов - ", err);
+            });
         })
         .catch((err) => {
           console.log("Ошибка при запросе к BeatFilms: ", err);
           setIsBeatFilmError(true);
+        })
+        .finally(() => {
           setIsLoading(false);
         });
     } else {
@@ -101,12 +144,37 @@ function Movies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
     setSearchKey(e.target.value);
   };
   const handleCardLike = (card) => {
-    card.isLiked = !card.isLiked;
-    setFilteredCards((cards) =>
-      cards.map((oldCard) => (oldCard.id === card.id ? card : oldCard))
-    );
+    if (card.isLiked) {
+      mainApi
+        .deleteMovie({ movieId: card.hexId })
+        .then(() => {
+          card.isLiked = false;
+          setFilteredCards((cards) =>
+            cards.map((oldCard) =>
+              oldCard.movieId === card.movieId ? card : oldCard
+            )
+          );
+        })
+        .catch((err) => {
+          console.log("Ошибка! Карточка НЕудалена из понравившихся - ", err);
+        });
+    } else {
+      mainApi
+        .addMovie(card)
+        .then((savedCard) => {
+          card.hexId = savedCard._id;
+          card.isLiked = true;
+          setFilteredCards((cards) =>
+            cards.map((oldCard) =>
+              oldCard.movieId === card.movieId ? card : oldCard
+            )
+          );
+        })
+        .catch((err) => {
+          console.log("Ошбика при Карточка добавлена в понравившиеся - ", err);
+        });
+    }
   };
-  // console.log(cardsToShowCounter);
   return (
     <>
       <Header isLoggedIn={true} onBurgerClick={onBurgerClick} />
@@ -126,7 +194,7 @@ function Movies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
               isMoreVisible={isMoreVisible}
               isNothingFound={isNothingFound}
               isError={isBeatFilmError}
-              onLikeClick={handleCardLike}
+              onCardButtonClick={handleCardLike}
               cards={filteredCards.slice(0, cardsToShowCounter)}
             />
           </>

@@ -1,5 +1,6 @@
 import React from "react";
 import "../Register/Register.css";
+import { Link } from "react-router-dom";
 
 function Login({ onSubmit, responceErrorText, clearResponceErrorText }) {
   const [inputs, setInputs] = React.useState({
@@ -11,12 +12,14 @@ function Login({ onSubmit, responceErrorText, clearResponceErrorText }) {
     password: true,
   });
   const [errorMessage, setErrorMessage] = React.useState("");
-  const [isFormActive, setIsFormActive] = React.useState(true);
+  const [isInputsActive, setIsInputsActive] = React.useState(true);
+  const [isSubmitActive, setIsSubmitActive] = React.useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsFormActive(false);
+    setIsInputsActive(false);
     onSubmit(inputs);
+    setIsInputsActive(true);
   };
 
   const validateField = (field, value) => {
@@ -24,21 +27,24 @@ function Login({ onSubmit, responceErrorText, clearResponceErrorText }) {
       case "email":
         if (!value.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i)) {
           setIsInputsValid({ ...isInputsValid, email: false });
+          setIsSubmitActive(false);
           setErrorMessage("Ошибка в почте");
         } else {
           setIsInputsValid({ ...isInputsValid, email: true });
+          setIsSubmitActive(true);
           setErrorMessage("");
         }
         break;
       case "password":
         if (value.length < 1) {
-          console.log(value.length);
           setIsInputsValid({ ...isInputsValid, password: false });
+          setIsSubmitActive(false);
           setErrorMessage(
             "Пароль должен содержать, по крайней мере, 1 символ"
           );
         } else {
           setIsInputsValid({ ...isInputsValid, password: true });
+          setIsSubmitActive(true);
           setErrorMessage("");
         }
         break;
@@ -56,7 +62,7 @@ function Login({ onSubmit, responceErrorText, clearResponceErrorText }) {
   return (
     <main className="sign">
       <div className="sign__container">
-        <a href="/" className="sign__logo transparent-link" />
+        <Link to="/" className="sign__logo transparent-link" />
         <h1 className="sign__title">Рады видеть!</h1>
         <form className="sign__form" onSubmit={handleSubmit}>
           <label className="sing__label" htmlFor="email">
@@ -69,10 +75,11 @@ function Login({ onSubmit, responceErrorText, clearResponceErrorText }) {
             name="email"
             placeholder="Ваша почта"
             type="email"
+            autoComplete="username"
             required
             value={inputs.email}
             onChange={handleInputChange}
-            disabled={isFormActive ? false : true}
+            disabled={isInputsActive ? false : true}
           />
 
           <label className="sing__label" htmlFor="password" type="password">
@@ -85,10 +92,11 @@ function Login({ onSubmit, responceErrorText, clearResponceErrorText }) {
             name="password"
             placeholder=""
             type="password"
+            autoComplete="new-password"
             required
             value={inputs.password}
             onChange={handleInputChange}
-            disabled={isFormActive ? false : true}
+            disabled={isInputsActive ? false : true}
           />
           <span className="sign__error">
             {errorMessage || responceErrorText}
@@ -96,15 +104,15 @@ function Login({ onSubmit, responceErrorText, clearResponceErrorText }) {
 
           <button
             className="sign__submit transparent-link"
-            disabled={(errorMessage || !isFormActive) ? true : false}
+            disabled={(errorMessage || !isSubmitActive) ? true : false}
           >
             Войти
           </button>
           <p className="sign__text">
             Ещё не зарегистрированы?
-            <a href="/signup" className="sign__link transparent-link">
+            <Link to="/signup" className="sign__link transparent-link">
               Регистрация
-            </a>
+            </Link>
           </p>
         </form>
       </div>

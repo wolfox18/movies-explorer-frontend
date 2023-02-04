@@ -18,17 +18,20 @@
   margin: 0;
 }
 .notfound__description {
-  padding: 5px 0 0;
+  padding: 5px 0 184px;
   font-weight: 400;
   font-size: 16px;
   line-height: 19px;
 }
 .notfound__link {
-  padding: 184px 0 0;
+  padding: 0;
   font-size: 14px;
   line-height: 17px;
   text-decoration: none;
   color: #3456f3;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 @media screen and (max-width: 1023px) {
   .notfound {
@@ -46,11 +49,10 @@
   .notfound__description {
     font-size: 12px;
     line-height: 15px;
-    padding: 10px 0 0;
+    padding: 10px 0 284px;
   }
   .notfound__link {
     font-size: 12px;
     line-height: 15px;
-    padding: 284px 0 0;
   }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import "./MoviesCard.css";
 import { durationToString } from "../../../utils/utils";
 
-function MoviesCard({ card, onLikeClick }) {
+function MoviesCard({ card, onCardButtonClick, isSaved }) {
   let likeClass;
 
   if (card.isLiked) {
@@ -10,12 +10,12 @@ function MoviesCard({ card, onLikeClick }) {
   } else {
     likeClass = "card__like transparent-link";
   }
-  if (card.isSaved) {
+  if (isSaved) {
     likeClass = "card__like transparent-link card__like_saved";
   }
-  const handleLikeClick = () =>
+  const handleCardButtonClick = () =>
   {
-    onLikeClick(card);
+    onCardButtonClick(card);
   }
 
   return (
@@ -26,11 +26,11 @@ function MoviesCard({ card, onLikeClick }) {
         target="_blank"
         rel="noreferrer"
       >
-        <img src={"https://api.nomoreparties.co/" + card.image.url} alt={card.nameRU} className="card__image" />
+        <img src={card.image} alt={card.nameRU} className="card__image" />
       </a>{" "}
       <div className="card__info">
         <h3 className="card__name">{card.nameRU}</h3>
-        <button onClick={handleLikeClick} className={likeClass} />
+        <button onClick={handleCardButtonClick} className={likeClass} />
       </div>
       <p className="card__duration">{durationToString(card.duration)}</p>
     </li>
