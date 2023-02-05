@@ -1,4 +1,4 @@
-import { API_URL } from "./utils";
+import { API_URL } from "./constants.js";
 
 class MainApi {
   constructor(data) {

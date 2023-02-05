@@ -7,7 +7,6 @@ import SearchForm from "../Movies/SearchForm/SearchForm";
 import Preloader from "../Movies/Preloader/Preloader";
 import { mainApi } from "../../utils/MainApi";
 import { filterMovies } from "../../utils/utils";
-import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function SavedMovies(props) {
   const { isNavTabOpened, onCloseNavTab, onBurgerClick } = props;
@@ -18,18 +17,13 @@ function SavedMovies(props) {
   const [searchKey, setSearchKey] = React.useState("");
   const [isMainApiError, setIsMainApiError] = React.useState(false);
 
-  const currentUser = React.useContext(CurrentUserContext);
-
   React.useEffect(() => {
     setIsLoading(true);
     mainApi
       .getMovies()
       .then((savedMovies) => {
-        const movies = savedMovies.filter(
-          (savedMovie) => savedMovie.owner.email === currentUser.email
-        );
-        setSavedCards(movies);
-        setCardsToShow(movies);
+        setSavedCards(savedMovies);
+        setCardsToShow(savedMovies);
         setIsLoading(false);
       })
       .catch((err) => {

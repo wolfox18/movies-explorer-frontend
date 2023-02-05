@@ -16,7 +16,7 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [isNavTabOpened, setIsNavTabOpened] = React.useState(false);
   const [apiErrorText, setApiErrorText] = React.useState("");
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
   const [succesMessage, setSuccesMessage] = React.useState("");
 
   React.useEffect(() => {
@@ -34,13 +34,22 @@ function App() {
 
   const checkToken = () => {
     const jwt = localStorage.getItem("jwt");
-    if (!jwt) return;
-    mainApi.getMe().then((user) => {
-      setIsLoggedIn(true);
-      setCurrentUser(user);
-    }).catch((err)=>{console.log("Ошибка при проверке токена: ", err);});
+    if (!jwt) {
+      setIsLoggedIn(false);
+      navigate("/");
+    } else {
+      mainApi
+        .getMe()
+        .then((user) => {
+          setIsLoggedIn(true);
+          setCurrentUser(user);
+        })
+        .catch((err) => {
+          console.log("Ошибка при проверке токена: ", err);
+        });
+    }
   };
-  const login = (credentials) => {
+  const login = (credentials, setFormActive) => {
     mainApi
       .authorise(credentials.email, credentials.password)
       .then((res) => {
@@ -50,27 +59,30 @@ function App() {
           .getMe()
           .then((res) => {
             setCurrentUser({ name: res.name, email: res.email });
+            setFormActive();
             navigate("/movies");
           })
           .catch((err) => {
             setApiErrorText(
               "При получении данных пользователя произошла ошибка"
             );
+            setFormActive();
           });
       })
       .catch((err) => {
         setApiErrorText("При авторизации пользователя произошла ошибка");
+        setFormActive();
       });
   };
-  const handleLogin = (inputs) => {
-    login(inputs);
+  const handleLogin = (inputs, setFormActive) => {
+    login(inputs, setFormActive);
   };
-  const handleRegister = (inputs) => {
+  const handleRegister = (inputs, setFormActive) => {
     const { name, email, password } = inputs;
     mainApi
       .register(name, email, password)
       .then((res) => {
-        login(inputs);
+        login(inputs, setFormActive);
       })
       .catch((err) => {
         if (err.message === "409") {
@@ -83,20 +95,24 @@ function App() {
   const clearResponceErrorText = () => {
     setApiErrorText("");
   };
-  const handleProfileChange = (data) => {
+  const handleProfileChange = (data, setFormActive) => {
     mainApi
       .patchMe(data)
       .then((res) => {
         setCurrentUser(data);
         clearResponceErrorText();
         setSuccesMessage("Данные успешно изменены");
+        setFormActive();
       })
       .catch((err) => {
         setApiErrorText("При обновлении данных пользователя произошла ошибка");
+        setFormActive();
       });
   };
   const handleLogOut = () => {
     localStorage.removeItem("jwt");
+    localStorage.removeItem("searchParams");
+    localStorage.removeItem("filteredMovies");
     setIsLoggedIn(false);
     navigate("/");
   };

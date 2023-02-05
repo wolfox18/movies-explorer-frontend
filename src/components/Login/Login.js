@@ -18,8 +18,9 @@ function Login({ onSubmit, responceErrorText, clearResponceErrorText }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsInputsActive(false);
-    onSubmit(inputs);
-    setIsInputsActive(true);
+    onSubmit(inputs, () => {
+      setIsInputsActive(true);
+    });
   };
 
   const validateField = (field, value) => {

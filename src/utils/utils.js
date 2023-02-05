@@ -1,31 +1,28 @@
-export const API_URL = "http://movi-api.nomoredomains.club";
-// export const API_URL = "http://localhost:3102";
-export const MOVIE_URL = "https://api.nomoreparties.co/beatfilm-movies";
-
+import { WINDOW_SIZE_BIG, WINDOW_SIZE_SMALL, SHORTS_DURATION, SHOW_BIG_AMOUNT, SHOW_MEDIUM_AMOUNT, SHOW_SMALL_AMOUNT, ADD_BIG_AMOUNT, ADD_SMALL_AMOUNT } from "./constants";
 export const filterMovies = (movies, key, isShort) => {
   const filteredMovies = movies.filter(
     (movie) =>
       movie.nameRU.toLowerCase().includes(key.toLowerCase()) &&
-      (!isShort || movie.duration <= 40)
+      (!isShort || movie.duration <= SHORTS_DURATION)
   );
   return filteredMovies;
 };
 export const howManyShow = () => {
   const windiwSize = window.innerWidth;
-  if (windiwSize > 1077) {
-    return 12;
-  } else if (windiwSize > 632) {
-    return 8;
+  if (windiwSize > WINDOW_SIZE_BIG) {
+    return SHOW_BIG_AMOUNT;
+  } else if (windiwSize > WINDOW_SIZE_SMALL) {
+    return SHOW_MEDIUM_AMOUNT;
   } else {
-    return 5;
+    return SHOW_SMALL_AMOUNT;
   }
 };
 export const howManyAdd = () => {
   const windiwSize = window.innerWidth;
-  if (windiwSize > 1077) {
-    return 3;
+  if (windiwSize > WINDOW_SIZE_BIG) {
+    return ADD_BIG_AMOUNT;
   } else {
-    return 2;
+    return ADD_SMALL_AMOUNT;
   }
 };
 export const durationToString = (durationMinutes) => {

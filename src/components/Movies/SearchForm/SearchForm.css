@@ -111,7 +111,12 @@
   font-size: 13px;
   line-height: 18px;
 }
-
+.searform__error{
+  font-size: 10px;
+  line-height: 12px;
+  padding-left: 30px;
+  color: red;
+}
 @media screen and (max-width: 1023px) {
   .searchblock {
     padding: 80px 30px 0px;

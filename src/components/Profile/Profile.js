@@ -83,8 +83,10 @@ function Profile({
     e.preventDefault();
     setIsInputsActive(false);
     setIsSubmitActive(false);
-    onSubmit(inputs);
-    setIsInputsActive(true);
+    onSubmit(inputs, () => {
+      setIsInputsActive(true);
+    });
+
   };
 
   return (

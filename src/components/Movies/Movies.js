@@ -14,7 +14,7 @@ function Movies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isBeatFilmsLoaded, setIsBeatFilmsLoaded] = React.useState(false);
   const [filteredCards, setFilteredCards] = React.useState([]);
-  const [cardsToShowCounter, setCardsToShowCounter] = React.useState([]);
+  const [cardsToShowCounter, setCardsToShowCounter] = React.useState(0);
   const [isShortsChecked, setIsShortsChecked] = React.useState(false);
   const [searchKey, setSearchKey] = React.useState("");
   const [isMoreVisible, setIsMoreVisible] = React.useState(false);
@@ -38,13 +38,17 @@ function Movies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
       setIsNothingFound(false);
     }
   }, [filteredCards, isBeatFilmsLoaded]);
+
   React.useEffect(() => {
     if (localStorage.getItem("searchParams")) {
       setSearchKey(JSON.parse(localStorage.getItem("searchParams")).key);
       setIsShortsChecked(
         JSON.parse(localStorage.getItem("searchParams")).isShorts
       );
-      showMovies();
+    }
+    if (localStorage.getItem("searchParams")) {
+      setCardsToShowCounter(howManyShow());
+      setFilteredCards(JSON.parse(localStorage.getItem("filteredMovies")));
     }
   }, []);
 
@@ -60,13 +64,13 @@ function Movies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
 
   const showMovies = () => {
     setCardsToShowCounter(howManyShow());
-    setFilteredCards(
-      filterMovies(
-        JSON.parse(localStorage.getItem("allMovies")),
-        searchKey,
-        isShortsChecked
-      )
+    const filteredMovies = filterMovies(
+      JSON.parse(localStorage.getItem("allMovies")),
+      searchKey,
+      isShortsChecked
     );
+    setFilteredCards(filteredMovies);
+    localStorage.setItem("filteredMovies", JSON.stringify(filteredMovies));
   };
   const handleSearch = (e) => {
     e.preventDefault();
@@ -143,20 +147,21 @@ function Movies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
   const handleSearchInputChange = (e) => {
     setSearchKey(e.target.value);
   };
+  const renderAfterLike = ({card}) => {
+    const cards = filteredCards.map((oldCard) => oldCard.movieId === card.movieId ? card : oldCard);
+    setFilteredCards(cards);
+    localStorage.setItem("filteredMovies", JSON.stringify(cards));
+  }
   const handleCardLike = (card) => {
     if (card.isLiked) {
       mainApi
         .deleteMovie({ movieId: card.hexId })
         .then(() => {
           card.isLiked = false;
-          setFilteredCards((cards) =>
-            cards.map((oldCard) =>
-              oldCard.movieId === card.movieId ? card : oldCard
-            )
-          );
+          renderAfterLike({card, isLiked: false})
         })
         .catch((err) => {
-          console.log("Ошибка! Карточка НЕудалена из понравившихся - ", err);
+          console.log("Ошибка! Карточка не удалена из понравившихся - ", err);
         });
     } else {
       mainApi
@@ -164,14 +169,10 @@ function Movies({ isNavTabOpened, onCloseNavTab, onBurgerClick }) {
         .then((savedCard) => {
           card.hexId = savedCard._id;
           card.isLiked = true;
-          setFilteredCards((cards) =>
-            cards.map((oldCard) =>
-              oldCard.movieId === card.movieId ? card : oldCard
-            )
-          );
+          renderAfterLike({card, isLiked: true})
         })
         .catch((err) => {
-          console.log("Ошбика при Карточка добавлена в понравившиеся - ", err);
+          console.log("Ошбика при добавлении карточки в понравившиеся - ", err);
         });
     }
   };
