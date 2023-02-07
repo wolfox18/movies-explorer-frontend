@@ -45,18 +45,27 @@ function SavedMovies(props) {
     setSearchKey(e.target.value);
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
+  const handleSearch = () => {
     setCardsToShow(filterMovies(savedCards, searchKey, isShortsChecked));
   };
 
-  const handleCardDelete = (card) => {
+  const handleCardDelete = (currentCard) => {
     mainApi
-      .deleteMovie({ movieId: card._id })
-      .then((res) => {
+      .deleteMovie({ movieId: currentCard._id })
+      .then(() => {
         setSavedCards((cards) =>
-          cards.filter((oldCard) => oldCard.movieId !== card.movieId)
+          cards.filter((movie) => movie.movieId !== currentCard.movieId)
         );
+        const newAllMovies = JSON.parse(localStorage.getItem("allMovies"))
+        newAllMovies.forEach(movie => {
+          if (movie.movieId === currentCard.movieId) {movie.isLiked = false}
+        });
+        localStorage.setItem("allMovies", JSON.stringify(newAllMovies));
+        const newFilteredMovies = JSON.parse(localStorage.getItem("filteredMovies"));
+        newFilteredMovies.forEach(movie => {
+          if (movie.movieId === currentCard.movieId) {movie.isLiked = false}
+        });
+        localStorage.setItem("filteredMovies", JSON.stringify(newFilteredMovies));
       })
       .catch((err) => {
         console.log("Ошибка при удалении карточки: ", err);

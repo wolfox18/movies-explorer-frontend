@@ -8,12 +8,20 @@ function Login({ onSubmit, responceErrorText, clearResponceErrorText }) {
     password: "",
   });
   const [isInputsValid, setIsInputsValid] = React.useState({
-    email: true,
-    password: true,
+    email: false,
+    password: false,
   });
   const [errorMessage, setErrorMessage] = React.useState("");
   const [isInputsActive, setIsInputsActive] = React.useState(true);
   const [isSubmitActive, setIsSubmitActive] = React.useState(false);
+
+  React.useEffect(() => {
+    if (isInputsValid.email && isInputsValid.password) {
+      setIsSubmitActive(true);
+    } else {
+      setIsSubmitActive(false);
+    }
+  }, [inputs]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,24 +36,20 @@ function Login({ onSubmit, responceErrorText, clearResponceErrorText }) {
       case "email":
         if (!value.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i)) {
           setIsInputsValid({ ...isInputsValid, email: false });
-          setIsSubmitActive(false);
           setErrorMessage("Ошибка в почте");
         } else {
           setIsInputsValid({ ...isInputsValid, email: true });
-          setIsSubmitActive(true);
           setErrorMessage("");
         }
         break;
       case "password":
         if (value.length < 1) {
           setIsInputsValid({ ...isInputsValid, password: false });
-          setIsSubmitActive(false);
           setErrorMessage(
             "Пароль должен содержать, по крайней мере, 1 символ"
           );
         } else {
           setIsInputsValid({ ...isInputsValid, password: true });
-          setIsSubmitActive(true);
           setErrorMessage("");
         }
         break;

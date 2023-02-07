@@ -11,16 +11,11 @@ function SearchForm(props) {
     onSearchInputChange,
   } = props;
   const [validations, setValidations] = React.useState({
-    isValid: false,
+    isValid: true,
     errorText: "",
   });
   React.useEffect(() => {
-    if (searchKey.length === 0) {
-      setValidations({
-        isValid: false,
-        errorText: "Необходимо заполнить поле поиска",
-      });
-    } else {
+    if (searchKey.length > 0) {
       setValidations({ isValid: true, errorText: "" });
     }
   }, [searchKey]);
@@ -29,10 +24,22 @@ function SearchForm(props) {
     onShortsChange();
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (searchKey.length === 0) {
+      setValidations({
+        isValid: false,
+        errorText: "Нужно ввести ключевое слово",
+      });
+    } else {
+      onSearch();
+    }
+  }
+
   return (
     <section aria-label="Поиск" className="searchblock">
       <div className="searchblock__container">
-        <form className="searchform" onSubmit={onSearch}>
+        <form className="searchform" onSubmit={handleSubmit}>
           <div className="searchform__search">
             <div className="searchform__icon" />
             <input
@@ -40,7 +47,6 @@ function SearchForm(props) {
               placeholder="Фильм"
               value={searchKey}
               onChange={onSearchInputChange}
-              required
             />
             <button
               className="searchform__submit transparent-link"

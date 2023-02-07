@@ -17,11 +17,11 @@ function Profile({
 }) {
   const [inputs, setInputs] = React.useState({
     name: "",
-    email: ""
+    email: "",
   });
   const [isInputsValid, setIsInputsValid] = React.useState({
-    name: true,
-    email: true,
+    name: false,
+    email: false,
   });
   const [errorMessage, setErrorMessage] = React.useState("");
   const [isInputsActive, setIsInputsActive] = React.useState(true);
@@ -34,13 +34,15 @@ function Profile({
   }, []);
 
   React.useEffect(() => {
-    if (inputs.name === currentUser.name && inputs.email === currentUser.email) {
+    if (
+      (inputs.name === currentUser.name &&
+        inputs.email === currentUser.email)
+    ) {
       setIsSubmitActive(false);
-    }
-    else {
+    } else {
       setIsSubmitActive(true);
     }
-  }, [inputs])
+  }, [inputs.name, inputs.email]);
 
   const validateField = (field, value) => {
     switch (field) {
@@ -86,7 +88,6 @@ function Profile({
     onSubmit(inputs, () => {
       setIsInputsActive(true);
     });
-
   };
 
   return (

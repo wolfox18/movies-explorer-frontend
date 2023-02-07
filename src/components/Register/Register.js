@@ -9,13 +9,21 @@ function Register({ onSubmit, responceErrorText, clearResponceErrorText }) {
     password: "",
   });
   const [isInputsValid, setIsInputsValid] = React.useState({
-    name: true,
-    email: true,
-    password: true,
+    name: false,
+    email: false,
+    password: false,
   });
   const [errorMessage, setErrorMessage] = React.useState("");
   const [isInputsActive, setIsInputsActive] = React.useState(true);
   const [isSubmitActive, setIsSubmitActive] = React.useState(false);
+
+  React.useEffect(() => {
+    if (isInputsValid.name && isInputsValid.email && isInputsValid.password) {
+      setIsSubmitActive(true);
+    } else {
+      setIsSubmitActive(false);
+    }
+  }, [inputs]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -31,11 +39,9 @@ function Register({ onSubmit, responceErrorText, clearResponceErrorText }) {
         if (!value.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i)) {
           setIsInputsValid({ ...isInputsValid, email: false });
           setErrorMessage("Ошибка в почте");
-          setIsSubmitActive(false);
         } else {
           setIsInputsValid({ ...isInputsValid, email: true });
           setErrorMessage("");
-          setIsSubmitActive(true);
         }
         break;
       case "name":
@@ -44,19 +50,15 @@ function Register({ onSubmit, responceErrorText, clearResponceErrorText }) {
           setErrorMessage(
             "В имени можно использовать только латиницу, кириллицу, пробел или дефис"
           );
-          setIsSubmitActive(false);
         } else {
           setIsInputsValid({ ...isInputsValid, name: true });
           setErrorMessage("");
-          setIsSubmitActive(true);
         }
         break;
       case "password":
         if (value.length < 1) {
           setIsInputsValid({ ...isInputsValid, password: false });
-          setErrorMessage(
-            "Пароль должен содержать, по крайней мере, 1 символ"
-          );
+          setErrorMessage("Пароль должен содержать, по крайней мере, 1 символ");
         } else {
           setIsInputsValid({ ...isInputsValid, password: true });
           setErrorMessage("");
