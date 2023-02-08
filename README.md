@@ -4,7 +4,7 @@
 
 Фронтенд дипломной работы в Яндекс Практикуме
 
-[https://movi.nomoredomainsclub.ru](https://movi.nomoredomainsclub.ru)
+[http://movi.nomoredomainsclub.ru](http://movi.nomoredomainsclub.ru)
 
 Используемый стек:
 
