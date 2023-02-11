@@ -15,6 +15,12 @@
   gap: 37px 24px;
   margin: 0;
   padding: 0;
+  list-style-type: none;
+}
+.cardlist__alert {
+  text-align: center;
+  font-weight: 500;
+  font-size: 20px;
 }
 .cardlist__more-container {
   padding: 50px 0 80px;
@@ -41,6 +47,9 @@
   .cardlist__container {
     gap: 30px;
   }
+  .cardlist__alert {
+    font-size: 18px;
+  }
 }
 @media screen and (max-width: 768px) {
   .cardlist {
@@ -50,5 +59,8 @@
     flex-direction: column;
     align-content: center;
     gap: 14px;
+  }
+  .cardlist__alert {
+    font-size: 14px;
   }
 }

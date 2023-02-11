@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import "./Navigation.css";
 
 function Navigation({ isOpened, onCloseNavTab }) {
@@ -13,28 +13,28 @@ function Navigation({ isOpened, onCloseNavTab }) {
         />
         <ul className="navigation__links">
           <li className="navigation__item">
-            <a
-              href="/"
+            <Link
+              to="/"
               className={`navigation__link transparent-link ${
                 location.pathname === "/" ? "navigation__link_active" : ""
               }`}
             >
               Главная
-            </a>
+            </Link>
           </li>
           <li className="navigation__item">
-            <a
-              href="/movies"
+            <Link
+              to="/movies"
               className={`navigation__link transparent-link ${
                 location.pathname === "/movies" ? "navigation__link_active" : ""
               }`}
             >
               Фильмы
-            </a>
+            </Link>
           </li>
           <li className="navigation__item">
-            <a
-              href="/saved-movies"
+            <Link
+              to="/saved-movies"
               className={`navigation__link transparent-link ${
                 location.pathname === "/saved-movies"
                   ? "navigation__link_active"
@@ -42,12 +42,12 @@ function Navigation({ isOpened, onCloseNavTab }) {
               }`}
             >
               Сохранённые фильмы
-            </a>
+            </Link>
           </li>
         </ul>
-        <a href="/profile" className="navigation__bottom-link transparent-link">
+        <Link to="/profile" className="navigation__bottom-link transparent-link">
           Аккаунт
-        </a>
+        </Link>
       </div>
     </div>
   );

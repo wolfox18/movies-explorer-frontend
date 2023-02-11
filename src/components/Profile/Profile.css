@@ -18,9 +18,22 @@
   align-items: center;
 }
 .profile__fields {
-  padding: 107px 0 203px;
+  padding: 107px 0 163px;
   margin: 0;
   list-style-type: none;
+}
+.profile__error {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  padding: 10px 0 10px;
+  color: #ff3055;
+}
+.profile__message {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  padding: 10px 0 10px;
 }
 .profile__input-layout {
   min-width: 410px;
@@ -66,6 +79,10 @@
 .profile__submit_type_colored {
   font-weight: 500;
   color: #ff3055;
+}
+.profile__submit:disabled{
+  color: #999999;
+  cursor: default;
 }
 @media screen and (max-width: 1023px) {
   .profile {

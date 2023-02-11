@@ -1,19 +1,20 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./NavTab.css";
 
 function NavTab() {
   return (
     <section aria-label="Навигация"className="navtab">
       <nav className="navtab__nav">
-        <a href="#about-project" className="navtab__link transparent-link">
+        <Link to="#about-project" className="navtab__link transparent-link">
           О проекте
-        </a>
-        <a href="#techs" className="navtab__link transparent-link">
+        </Link>
+        <Link to="#techs" className="navtab__link transparent-link">
           Технологии
-        </a>
-        <a href="#about-me" className="navtab__link transparent-link">
+        </Link>
+        <Link to="#about-me" className="navtab__link transparent-link">
           Студент
-        </a>
+        </Link>
       </nav>
     </section>
   );

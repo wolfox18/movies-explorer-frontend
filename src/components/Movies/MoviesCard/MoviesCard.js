@@ -1,10 +1,11 @@
 import React from "react";
 import "./MoviesCard.css";
+import { durationToString } from "../../../utils/utils";
 
-function MoviesCard({ imagePath, name, isLiked, duration, isSaved }) {
+function MoviesCard({ card, onCardButtonClick, isSaved }) {
   let likeClass;
 
-  if (isLiked) {
+  if (card.isLiked) {
     likeClass = "card__like transparent-link card__like_liked";
   } else {
     likeClass = "card__like transparent-link";
@@ -12,22 +13,26 @@ function MoviesCard({ imagePath, name, isLiked, duration, isSaved }) {
   if (isSaved) {
     likeClass = "card__like transparent-link card__like_saved";
   }
+  const handleCardButtonClick = () =>
+  {
+    onCardButtonClick(card);
+  }
 
   return (
     <li className="card">
       <a
-        href="https://youtube.com"
+        href={card.trailerLink}
         className="card__link transparent-link"
         target="_blank"
         rel="noreferrer"
       >
-        <img src={imagePath} alt={name} className="card__image" />
+        <img src={card.image} alt={card.nameRU} className="card__image" />
       </a>{" "}
       <div className="card__info">
-        <h3 className="card__name">{name}</h3>
-        <button className={likeClass} />
+        <h3 className="card__name">{card.nameRU}</h3>
+        <button onClick={handleCardButtonClick} className={likeClass} />
       </div>
-      <p className="card__duration">{duration}</p>
+      <p className="card__duration">{durationToString(card.duration)}</p>
     </li>
   );
 }

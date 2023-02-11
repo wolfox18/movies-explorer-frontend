@@ -72,6 +72,10 @@
   padding: 0;
   cursor: pointer;
 }
+.sign__submit:disabled{
+  background: #a0a0a0;
+  cursor: default;
+}
 .sign__text {
   align-self: center;
   padding-top: 16px;
